@@ -2,7 +2,7 @@
 
 Este proyecto sirve como guía de inicio rápido para la construcción de sistemas que apliquen las tecnologías Docker, FastAPI, SQLAlchemy.
 
-Para iniciar el proyecto solo básta con clonarlo y ejecutar:
+Para iniciar el proyecto solo básta con clonarlo, crear el archivo .env igual que en el ejemplo y ejecutar:
 
 ```
 docker-compose up -d
