@@ -1,0 +1,30 @@
+version: '3.7'
+
+services:
+  app_my_finances:
+    container_name: app_my_finances
+    build: .
+    depends_on:
+      - postgres_my_finances
+    volumes:
+      - ./:/app
+    ports:
+      - 8080:8080
+    env_file:
+      - ./.env
+
+  postgres_my_finances:
+    container_name: postgres_my_finances
+    restart: always
+    image: postgres:12.0-alpine
+    env_file:
+        - ./.env
+    volumes:
+      - db_my_finances:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    command: ["postgres", "-c", "log_statement=all"]
+
+volumes:
+    db_my_finances:
+      name: db_my_finances
