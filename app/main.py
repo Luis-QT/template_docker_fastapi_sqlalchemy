@@ -9,8 +9,8 @@ from libraries.translator.translator import Traslator
 app = FastAPI(
     docs_url="/docs",
     redoc_url="/redocs",
-    title="My Finances API",
-    description="Esta web documenta las APIs del proyecto Mis Finanzas",
+    title="Template Docker-FastAPI-SQLAlchemy",
+    description="Esta web documenta las APIs de la plantilla de proyecto.",
     version="1.0",
     openapi_url="/openapi.json"
 )
