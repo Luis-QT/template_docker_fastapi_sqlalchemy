@@ -1,8 +1,6 @@
 """ API Validator """
 from libraries.classes.api_base import APIBase
 from libraries.utils.crypto import verify_password
-from libraries.utils.exception import dao_exception
-from libraries.translator.translator import Traslator
 from app.db.models import User
 
 class ValidatorLogin(APIBase):
@@ -15,6 +13,7 @@ class ValidatorLogin(APIBase):
         self.val_password()
 
     def find_user(self):
+        """ Buscar el usuario """
         self.data['user'] = self.db.query(User).filter_by(
             username=self.data.get('username')
         ).first()

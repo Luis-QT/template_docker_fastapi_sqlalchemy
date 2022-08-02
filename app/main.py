@@ -1,7 +1,6 @@
 """ File to init FastAPI """
 import time
 from fastapi import FastAPI, Request
-from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from app.apis.auth.router import route as route_auth
 from app.apis.master import router as master_router

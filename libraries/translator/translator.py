@@ -19,7 +19,7 @@ class Traslator:
         """ Load translations """
         cls.traslations = {}
         for filename in cls.files:
-            with open(f'/app/libraries/translator/jsons/{filename}.json') as file:
+            with open(f'/app/libraries/translator/jsons/{filename}.json', encoding="utf-8") as file:
                 data = json.load(file)
                 cls.traslations = {
                     **Traslator.traslations,

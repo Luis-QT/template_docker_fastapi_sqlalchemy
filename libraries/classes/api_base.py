@@ -1,11 +1,12 @@
 """" API Base """
-
 from libraries.translator.translator import Traslator
 from libraries.utils.exception import dao_exception
 
-
 class APIBase:
+    """ API Base """
+
     def __init__(self, request):
+        """ Init API Base """
         self.request = request
         self.db = None
         self.user_session = None
@@ -24,6 +25,7 @@ class APIBase:
         self.timezone = self.request.get('timezone')
 
     def validation_exception(self, field, message):
+        """ Validation exception """
         return dao_exception(
             400, field, self.translator.translate(message)
         )

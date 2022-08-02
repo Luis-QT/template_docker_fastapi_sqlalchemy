@@ -1,7 +1,5 @@
 """ User model """
-from sqlalchemy import Column, String, Date, Integer, Enum, Text, ForeignKey
-from sqlalchemy.orm import relationship
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import Column, String, Integer, Text
 from app.db.base import BasePsql
 from app.db.mixins.guid_mixin import GuidMixin
 from app.db.mixins.timestamp_mixin import TimestampMixin
