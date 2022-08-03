@@ -1,27 +1,16 @@
-""" API Module """
-from typing import Optional
-from sqlalchemy.orm import Session
-from fastapi import APIRouter, Depends, Header
-from fastapi.security import OAuth2PasswordRequestForm
-from app.apis.auth.login.flow import FlowLogin
-from app.apis.auth.login.validator import ValidatorLogin
-from app.base_schemas import TokenBase
-from app.connections.database import get_db
+""" Define el modulo de la API register """
+from requests import Session
+from app.apis.auth.login.flow import LoginFlow
+from app.apis.auth.login.input import LoginInput
+from app.apis.auth.login.validator import LoginValidator
+from libraries.classes.module.module_api import ModuleAPI
 
-router = APIRouter(prefix="/api/auth")
+class LoginModule(ModuleAPI):
+    """ Clase que controla a los componentes de la API Register """
 
-@router.post("/login", response_model=TokenBase)
-def api_login(
-    form_data: OAuth2PasswordRequestForm = Depends(),
-    db: Session = Depends(get_db),
-    language: Optional[str] = Header("EN")
-):
-    """ Create token rtc """
-    request = {
-        'username': form_data.username,
-        'password': form_data.password,
-        'db': db,
-        'language': language
-    }
-    ValidatorLogin(request).run()
-    return FlowLogin(request).run()
+    def __init__(self, request: LoginInput, db: Session):
+        """ Constructor de la clase """
+        super().__init__()
+        self.validator_api = LoginValidator(request)
+        self.flow_api = LoginFlow(request)
+        self.db = db

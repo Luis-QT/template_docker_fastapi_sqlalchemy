@@ -1,4 +1,5 @@
 """ File to init FastAPI """
+import os
 import time
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -26,7 +27,9 @@ app.add_middleware(
 
 Traslator.load_translations()
 route_auth(app)
-app.include_router(master_router.router, tags=["Master"])
+
+if os.environ['APP_MODE'] != "production":
+    app.include_router(master_router.router, tags=["Master"])
 
 @app.middleware("http")
 async def add_process_time_header(request: Request, call_next):

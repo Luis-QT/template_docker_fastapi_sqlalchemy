@@ -1,33 +1,46 @@
-""" API Validator """
-from libraries.classes.api_base import APIBase
+
+""" Define las validaciones de la API register """
+from app.apis.auth.login.input import LoginInput
+from app.db.models.user import User
+from libraries.classes.validator.validator_api import ValidatorAPI
+from libraries.translator.translator import Traslator
 from libraries.utils.crypto import verify_password
-from app.db.models import User
 
-class ValidatorLogin(APIBase):
-    """ API Validator """
+class LoginValidatorData:
+    def __init__(self, user:User):
+        self.user = user
 
-    def run(self):
-        """ Run validator """
-        self.find_user()
+class LoginValidator(ValidatorAPI, LoginValidatorData):
+    """ Clase que valida la API Register """
+
+    def __init__(self, request:LoginInput):
+        """ Constructor de la clase """
+        super().__init__()
+        self.translator = Traslator(request.language)
+        self.request = request
+        self.db = None
+
+    def validate(self):
+        """ Función que ejecuta las validaciones de la API """
         self.val_username_exist()
         self.val_password()
-
-    def find_user(self):
-        """ Buscar el usuario """
-        self.data['user'] = self.db.query(User).filter_by(
-            username=self.data.get('username')
-        ).first()
+        return LoginValidatorData(
+            user=self.user
+        )
 
     def val_username_exist(self):
         """ Validar si existe el usuario """
-        if self.data.get('user') is None:
+        self.user = self.db.query(User).filter_by(
+            username=self.request.username
+        ).first()
+        if self.user is None:
             raise self.validation_exception(
                 'username', 'The username not found'
             )
 
     def val_password(self):
         """ Validar si la contraseña es correcta """
-        is_valid = verify_password(self.data.get('password'), self.data.get('user').password)
+        is_valid = verify_password(self.request.password, self.user.password)
         if not is_valid:
             raise self.validation_exception(
                 'username', 'The username not found'

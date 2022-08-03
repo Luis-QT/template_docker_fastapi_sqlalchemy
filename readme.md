@@ -1,12 +1,12 @@
 # Template Docker - FastAPI - SQLAlchemy
 
 Este proyecto sirve como guía de inicio rápido para la construcción de sistemas que apliquen las tecnologías Docker, FastAPI, SQLAlchemy.
-
 Para iniciar el proyecto solo básta con clonarlo, crear el archivo .env igual que en el ejemplo y ejecutar:
 
 ```
 docker-compose up -d
 ```
+
 Entrar a la documentación de APIs en http://localhost:8080/docs
 
 La aplicación cuenta con:
