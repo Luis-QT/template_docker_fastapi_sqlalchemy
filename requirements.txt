@@ -13,3 +13,4 @@ tzlocal
 pylint
 requests
 python-multipart
+sentry-sdk[fastapi]

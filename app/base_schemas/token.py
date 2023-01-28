@@ -1,5 +1,4 @@
 """ Token Schema """
-from uuid import UUID
 from pydantic import BaseModel
 
 class TokenBase(BaseModel):
@@ -10,7 +9,7 @@ class TokenBase(BaseModel):
 
 class TokenDataBase(BaseModel):
     """ Token data """
-    id: UUID
-    username: str
+    id: int
+    email: str
     avatar_url: str
     user_type: str

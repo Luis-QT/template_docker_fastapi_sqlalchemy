@@ -1,15 +1,14 @@
 """ User model """
-from sqlalchemy import Column, String, Integer, Text
+from sqlalchemy import Column, String, Text, Boolean, Integer
 from app.db.base import BasePsql
-from app.db.mixins.guid_mixin import GuidMixin
 from app.db.mixins.timestamp_mixin import TimestampMixin
 
-class User(BasePsql, GuidMixin, TimestampMixin):
+class User(BasePsql, TimestampMixin):
     """ The users table """
     __tablename__ = 'users'
+    id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
-    username = Column(String, nullable=False)
     password = Column(String, nullable=True)
     email = Column(String, nullable=False)
-    status = Column(Integer, default=1)
     avatar_url = Column(Text, nullable=False)
+    deleted = Column(Boolean, default=False)

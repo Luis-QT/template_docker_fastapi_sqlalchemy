@@ -1,23 +1,26 @@
-""" Define las clases de entrada de la API register """
-from fastapi import Depends
-from pydantic import BaseModel, Field
-from libraries.classes.input.input_api import InputAPI, input_api
+""" Defines the input schema of the API Register """
+from pydantic import BaseModel
+from fastapi import Body
 
 class RegisterBody(BaseModel):
-    """ Clase que define los datos del body de la API register """
-    name: str = Field(..., example="test")
-    username: str = Field(..., example="test")
-    email: str = Field(..., example="test@test.com")
-    password: str = Field(..., example="password")
+    """ Body API """
+    name: str = Body(..., example="test")
+    email: str = Body(..., example="test@test.com")
+    password: str = Body(..., example="password")
 
-class RegisterInput(InputAPI, RegisterBody):
-    pass
+class RegisterQuery(BaseModel):
+    """ Query API """
 
-def register_input(
-    body: RegisterBody,
-    input_api: InputAPI = Depends(input_api),
-    ):
-    return RegisterInput.parse_obj({
-        **input_api.dict(),
-        **body.dict()
-    })
+class RegisterHeader(BaseModel):
+    """ Header API """
+
+class RegisterPath(BaseModel):
+    """ Path API """
+
+class RegisterInput(
+    RegisterBody,
+    RegisterQuery,
+    RegisterHeader,
+    RegisterPath
+):
+    """ Input API """

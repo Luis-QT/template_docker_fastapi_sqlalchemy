@@ -1,21 +1,34 @@
-""" Define las clases de entrada de la API register """
-from fastapi import Depends
-from pydantic import BaseModel, Field
-
-from libraries.classes.input.input_api import InputAPI, input_api
+""" Defines the input schema of the API Login """
+from fastapi import Body
+from pydantic import BaseModel
 
 class LoginBody(BaseModel):
-    username: str = Field(..., example="admin")
-    password: str = Field(..., example="123456")
+    """ Body API """
+    email: str = Body(...)
+    password: str = Body(...)
 
-class LoginInput(InputAPI, LoginBody):
-    pass
+    class Config:
+        """ Input example """
+        schema_extra = {
+            "example": {
+                "email": "admin@admin.com",
+                "password": "123456"
+            }
+        }
 
-def login_input(
-    body: LoginBody,
-    input_api: InputAPI = Depends(input_api)
-    ):
-    return LoginInput.parse_obj({
-        **input_api.dict(),
-        **body.dict()
-    })
+class LoginQuery(BaseModel):
+    """ Query API """
+
+class LoginHeader(BaseModel):
+    """ Header API """
+
+class LoginPath(BaseModel):
+    """ Path API """
+
+class LoginInput(
+    LoginBody,
+    LoginQuery,
+    LoginHeader,
+    LoginPath
+):
+    """ Input API """

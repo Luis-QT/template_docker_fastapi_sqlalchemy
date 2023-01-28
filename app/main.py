@@ -1,17 +1,29 @@
 """ File to init FastAPI """
 import os
 import time
+import sentry_sdk
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from app.apis.auth.router import route as route_auth
-from app.apis.master import router as master_router
+from app.apis.routes import route as route_apis
+from app.apis.master.router import router as master_router
 from libraries.translator.translator import Traslator
+
+sentry_sdk.init(
+    dsn=os.getenv(
+        'SENTRY_URL',
+        ""
+    ),
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    # We recommend adjusting this value in production,
+    traces_sample_rate=1.0,
+)
 
 app = FastAPI(
     docs_url="/docs",
     redoc_url="/redocs",
-    title="Template Docker-FastAPI-SQLAlchemy",
-    description="Esta web documenta las APIs de la plantilla de proyecto.",
+    title="APIs",
+    description="",
     version="1.0",
     openapi_url="/openapi.json"
 )
@@ -26,10 +38,10 @@ app.add_middleware(
 )
 
 Traslator.load_translations()
-route_auth(app)
+route_apis(app)
 
 if os.environ['APP_MODE'] != "production":
-    app.include_router(master_router.router, tags=["Master"])
+    app.include_router(master_router, tags=["Master"])
 
 @app.middleware("http")
 async def add_process_time_header(request: Request, call_next):
@@ -44,3 +56,9 @@ async def add_process_time_header(request: Request, call_next):
 async def get():
     """ Response / """
     return "Hola Mundo"
+
+@app.get("/sentry-debug")
+async def trigger_error():
+    """ Generate error to test Sentry """
+    division_by_zero = 1 / 0
+    return division_by_zero

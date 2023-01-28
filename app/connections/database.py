@@ -6,11 +6,20 @@ from app.db import BasePsql, Session
 def build_uri():
     """ Build Database URI Postgres """
     uri_psql = str("")
-    if os.environ['APP_MODE'] == "development":
+    
+    if os.environ['APP_MODE'] in ['development', 'staging']:
         uri_psql = str("postgresql://{user}:{password}@{host}:{port}/{database}").format(
             user=os.environ['POSTGRES_USER'],
             password=os.environ['POSTGRES_PASSWORD'],
-            host="postgres_my_finances",
+            host="db_template",
+            port=os.environ['POSTGRES_PORT'],
+            database=os.environ['POSTGRES_DB']
+        )
+    elif os.environ['APP_MODE'] == 'production':
+        uri_psql = str("postgresql://{user}:{password}@{host}:{port}/{database}").format(
+            user=os.environ['POSTGRES_USER'],
+            password=os.environ['POSTGRES_PASSWORD'],
+            host="psql-integrador",
             port=os.environ['POSTGRES_PORT'],
             database=os.environ['POSTGRES_DB']
         )

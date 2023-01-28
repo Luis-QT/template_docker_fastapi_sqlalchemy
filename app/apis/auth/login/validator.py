@@ -1,47 +1,39 @@
 
-""" Define las validaciones de la API register """
+""" Defines the validations of the API Login """
 from app.apis.auth.login.input import LoginInput
 from app.db.models.user import User
-from libraries.classes.validator.validator_api import ValidatorAPI
-from libraries.translator.translator import Traslator
+from libraries.api_manager.validator.validator_api import ValidatorAPI
 from libraries.utils.crypto import verify_password
 
-class LoginValidatorData:
-    def __init__(self, user:User):
-        self.user = user
+class LoginValidator(ValidatorAPI):
+    """ Class that validates the input of the API """
 
-class LoginValidator(ValidatorAPI, LoginValidatorData):
-    """ Clase que valida la API Register """
-
-    def __init__(self, request:LoginInput):
-        """ Constructor de la clase """
+    def __init__(self):
+        """ Constructor of the class """
         super().__init__()
-        self.translator = Traslator(request.language)
-        self.request = request
-        self.db = None
+        self.request:LoginInput
+        self.user = None
 
-    def validate(self):
-        """ Función que ejecuta las validaciones de la API """
-        self.val_username_exist()
+    def validate_api(self):
+        """ Function that ejecutes all the validations """
+        self.val_email_exist()
         self.val_password()
-        return LoginValidatorData(
-            user=self.user
-        )
 
-    def val_username_exist(self):
-        """ Validar si existe el usuario """
+    def val_email_exist(self):
+        """ Validate if the email exist """
         self.user = self.db.query(User).filter_by(
-            username=self.request.username
+            email=self.request.email
         ).first()
         if self.user is None:
             raise self.validation_exception(
-                'username', 'The username not found'
+                'email', 'No se encontró el usuario'
             )
+        self.module_data['user'] = self.user
 
     def val_password(self):
-        """ Validar si la contraseña es correcta """
+        """ Validate if the password is correct """
         is_valid = verify_password(self.request.password, self.user.password)
         if not is_valid:
             raise self.validation_exception(
-                'username', 'The username not found'
+                'email', 'Contraseña incorrecta'
             )

@@ -1,11 +1,11 @@
 version: '3.7'
 
 services:
-  app_my_finances:
-    container_name: app_my_finances
+  app_template:
+    container_name: app_template
     build: .
     depends_on:
-      - postgres_my_finances
+      - db_template
     volumes:
       - ./:/app
     ports:
@@ -13,18 +13,18 @@ services:
     env_file:
       - ./.env
 
-  postgres_my_finances:
-    container_name: postgres_my_finances
+  db_template:
+    container_name: db_template
     restart: always
     image: postgres:12.0-alpine
     env_file:
         - ./.env
     volumes:
-      - db_my_finances:/var/lib/postgresql/data
+      - db_template:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     command: ["postgres", "-c", "log_statement=all"]
 
 volumes:
-    db_my_finances:
-      name: db_my_finances
+    db_template:
+      name: db_template
